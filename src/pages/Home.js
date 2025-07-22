@@ -55,7 +55,7 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Hospital Management</h1>
+      <h1>Hospital Management System</h1>
       <button onClick={() => handleCreate('patients')}>Create Patient</button>
       <button onClick={() => handleCreate('medicines')}>Create Medicine</button>
       <DataTable
