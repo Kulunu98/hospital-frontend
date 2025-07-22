@@ -34,7 +34,7 @@ jobs:
 
       # Step 5: Run ESLint (code quality check)
       - name: Run ESLint (code quality check)
-        run: npm run lint -- --max-warnings=0 --quiet 
+        run: npm run lint -- --max-warnings=0 --quiet --verbose
 
       # Step 6: Dependency vulnerability check
       - name: Dependency vulnerability check
