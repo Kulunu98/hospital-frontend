@@ -3,27 +3,64 @@ name: Deploy Vite React App to S3
 on:
   push:
     branches:
-      - main  # or your default branch (e.g., 'master')
+      - main  # or your default branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18  # Use the version required by your project
 
-      - name: Install dependencies
-        run: npm install
+      # Step 3: Cache node_modules (optional optimization)
+      - name: Cache node_modules
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: deps-${{ runner.os }}-${{ hashFiles('package-lock.json', 'package.json') }}
 
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 5: Run ESLint (code quality check)
+      - name: Run ESLint (code quality check)
+        run: npm run lint -- --max-warnings=0 --quiet 
+
+      # Step 6: Dependency vulnerability check
+      - name: Dependency vulnerability check
+        run: npm audit --audit-level=moderate --json | jq -r '.metadata.vulnerabilities'
+
+      # Step 7: Upload node_modules as artifact (optional)
+      - name: Upload node_modules as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: node_modules
+          path: node_modules/
+          retention-days: 7
+
+      # Step 8: Build the app
       - name: Build the app
         run: npm run build
 
+      # Step 9: Upload dist build artifact (optional)
+      - name: Upload dist build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
+
+      # Step 10: Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -31,10 +68,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
+      # Step 11: Deploy to S3
       - name: Deploy to S3
         run: |
-          aws s3 sync build/ s3://${{ secrets.S3_BUCKET }} --delete --no-follow-symlinks
+          aws s3 sync dist s3://${{ secrets.S3_BUCKET }} --delete --no-follow-symlinks
 
+      # Step 12: Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
