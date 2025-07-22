@@ -45,7 +45,7 @@ jobs:
 
       # Step 4: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # Step 5: Run ESLint (code quality check)
       - name: Run ESLint (code quality check)
