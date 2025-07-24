@@ -19,7 +19,7 @@ const ViewModal = ({ data, onClose }) => {
           <p><strong>Price:</strong> {data.price}</p>
         </div>
       )}
-      <button onClick={onClose}>Close</button>
+      <button className="close-btn" onClick={onClose}>Close</button>
     </div>
   );
 };

@@ -54,10 +54,10 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>Hospital Management System</h1>
-      <button onClick={() => handleCreate('patients')}>Create Patient</button>
-      <button onClick={() => handleCreate('medicines')}>Create Medicine</button>
+    <div className="container">
+      <h1>Hospital Management</h1>
+      <button className="create-btn" onClick={() => handleCreate('patients')}>Create Patient</button>
+      <button className="create-btn" onClick={() => handleCreate('medicines')}>Create Medicine</button>
       <DataTable
         data={data}
         onEdit={handleEdit}
@@ -77,6 +77,7 @@ const Home = () => {
       {viewData && <ViewModal data={viewData} onClose={() => setViewData(null)} />}
     </div>
   );
+
 };
 
 export default Home;

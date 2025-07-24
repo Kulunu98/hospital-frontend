@@ -7,7 +7,7 @@ const DataTable = ({ data, onEdit, onDelete, onView }) => {
         <tr>
           <th>Type</th>
           <th>Name</th>
-          <th>Info</th>
+          <th>Age / Price</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -18,9 +18,9 @@ const DataTable = ({ data, onEdit, onDelete, onView }) => {
             <td>{row.name}</td>
             <td>{row.age || row.price || '-'}</td>
             <td>
-              <button onClick={() => onView(row)}>View</button>
-              <button onClick={() => onEdit(row)}>Edit</button>
-              <button onClick={() => onDelete(row)}>Delete</button>
+              <button className="view-btn" onClick={() => onView(row)}>View</button>
+              <button className="edit-btn" onClick={() => onEdit(row)}>Edit</button>
+              <button className="delete-btn" onClick={() => onDelete(row)}>Delete</button>
             </td>
           </tr>
         ))}

@@ -36,7 +36,7 @@ const RecordForm = ({ type, onSubmit, initialData = {}, onClose }) => {
           </>
         )}
         <button type="submit">Save</button>
-        <button type="button" onClick={onClose}>Cancel</button>
+        <button type="button" className="close-btn" onClick={onClose}>Cancel</button>
       </form>
     </div>
   );
